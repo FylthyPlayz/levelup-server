@@ -1,0 +1,38 @@
+[
+    {
+        "model": "levelupapi.game",
+        "pk": 1,
+        "fields": {
+            "title": "Final Fantasy 7 Remake",
+            "maker": "Square Enix",
+            "number_of_players": 1,
+            "skill_level": 7,
+            "game_type_id": 2,
+            "gamer_id": 1
+        }
+    },
+    {
+        "model": "levelupapi.game",
+        "pk": 2,
+        "fields": {
+            "title": "League of Legends",
+            "maker": "Square Enix",
+            "number_of_players": 10,
+            "skill_level": 10,
+            "game_type_id": 3,
+            "gamer_id": 1
+        }
+    },
+    {
+        "model": "levelupapi.game",
+        "pk": 3,
+        "fields": {
+            "title": "Elder Scrolls Online",
+            "maker": "Zenimax Studios",
+            "number_of_players": 100,
+            "skill_level": 8,
+            "game_type_id": 3,
+            "gamer_id": 1
+        }
+    }
+]
