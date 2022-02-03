@@ -9,5 +9,16 @@
             "time": "12:30",
             "organizer": 1
         }
+    },
+    {
+        "model": "levelupapi.event",
+        "pk": 2,
+        "fields": {
+            "game": 3,
+            "description": "Lots of loud noises in chat. Big mute.",
+            "date": "2022-02-03",
+            "time": "9:30",
+            "organizer": 1
+        }
     }
 ]

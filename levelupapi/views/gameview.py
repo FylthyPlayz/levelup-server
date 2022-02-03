@@ -1,4 +1,5 @@
 from django.http import HttpResponseServerError
+from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
@@ -23,20 +24,41 @@ class GameView(ViewSet):
     
     def create(self, request):
         gamer = Gamer.objects.get(user=request.auth.user)
-        game_type = GameType.objects.get(pk=request.data["game_type"])
+        try:
+            serializer = CreateGameSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(gamer=gamer)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except ValidationError as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_400_BAD_REQUEST)
 
-        game = Game.objects.create(
-            title=request.data['title'],
-            maker=request.data['maker'],
-            number_of_players=request.data['number_of_players'],
-            gamer=gamer,
-            game_type=game_type
-        )
-        serializer = GameSerializer(game)
-        return Response(serializer.data)
+    def update(self, request, pk):
+        """Handle PUT requests for a game
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+
+        game = Game.objects.get(pk=pk)
+        game.title = request.data["title"]
+        game.maker = request.data["maker"]
+        game.number_of_players = request.data["number_of_players"]
+        game.skill_level = request.data["skill_level"]
+
+        game_type = GameType.objects.get(pk=request.data["game_type"])
+        game.game_type = game_type
+        game.save()
+
+        return Response(None, status=status.HTTP_204_NO_CONTENT)
+
 
 class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ('id', 'game_type', 'title', 'maker', 'gamer', 'number_of_players', 'skill_level')
         depth = 1
+
+class CreateGameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Game
+        fields = ['id', 'title', 'maker', 'number_of_players', 'skill_level', 'game_type']
