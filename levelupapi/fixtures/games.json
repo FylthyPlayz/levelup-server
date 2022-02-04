@@ -16,7 +16,7 @@
         "pk": 2,
         "fields": {
             "title": "League of Legends",
-            "maker": "Square Enix",
+            "maker": "Riot Games",
             "number_of_players": 10,
             "skill_level": 10,
             "game_type_id": 3,
