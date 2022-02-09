@@ -6,3 +6,12 @@ class Event(models.Model):
     date = models.DateField()
     time = models.TimeField(auto_now_add=False, auto_now=False)
     organizer = models.ForeignKey("Gamer", on_delete=models.CASCADE, related_name='organizing')
+    attendees = models.ManyToManyField("Gamer", through="EventGamer", related_name="attending")
+
+    @property
+    def joined(self):
+        return self.__joined
+
+    @joined.setter
+    def joined(self, value):
+        self.__joined = value

@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
-from levelupapi.models import Event, EventGamer, Gamer
+from levelupapi.models import Event, Gamer
 
 class EventView(ViewSet):
     def retrieve(self, request, pk):
@@ -17,9 +17,12 @@ class EventView(ViewSet):
     
     def list(self, request):
         events = Event.objects.all()
+        gamer = Gamer.objects.get(user=request.auth.user)
         game = request.query_params.get('game', None)
         if game is not None:
             events = events.filter(game_id=game)
+        for event in events:
+            event.joined = gamer in event.attendees.all()
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data)
 
@@ -62,10 +65,17 @@ class EventView(ViewSet):
         event.attendees.add(gamer)
         return Response({'message': 'Gamer added'}, status=status.HTTP_201_CREATED)
 
+    @action(methods=['delete'], detail=True)
+    def leave(self, request, pk):
+        gamer = Gamer.objects.get(user=request.auth.user)
+        event = Event.objects.get(pk=pk)
+        event.attendees.remove(gamer)
+        return Response({'message': 'Gamer removed'}, status=status.HTTP_204_NO_CONTENT)
+
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ('id', 'game', 'description', 'date', 'time', 'organizer')
+        fields = ('id', 'game', 'description', 'date', 'time', 'organizer', 'attendees', 'joined')
         depth = 1
 
 class CreateEventSerializer(serializers.ModelSerializer):
