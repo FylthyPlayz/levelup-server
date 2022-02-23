@@ -7,6 +7,7 @@ from levelupapi.views import GameTypeView
 from levelupapi.views import EventView
 from levelupapi.views import GameView
 
+
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'gametypes', GameTypeView, 'gametype')
 router.register(r'events', EventView, 'event')
@@ -19,4 +20,5 @@ urlpatterns = [
     path('api-auth', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
     path('', include (router.urls)),
+    path('', include('levelupreports.urls')),
 ]
