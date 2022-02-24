@@ -3,9 +3,13 @@ from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers, status
+from rest_framework.permissions import DjangoModelPermissions
 from levelupapi.models import Game, GameType, Gamer
 
+
 class GameView(ViewSet):
+    permission_classes = [ DjangoModelPermissions ]
+    queryset = Game.objects.none()
     def retrieve(self, request, pk):
         try:
             game = Game.objects.get(pk=pk)

@@ -23,7 +23,7 @@ class UserEventList(View):
                 user_id,
                 full_name
             FROM
-                GAMES_BY_USER
+                EVENTS_BY_USER
             """)
             # Pass the db_cursor to the dict_fetch_all function to turn the fetch_all() response into a dictionary
             dataset = dict_fetch_all(db_cursor)
@@ -52,7 +52,7 @@ class UserEventList(View):
                 user_dict = next(
                     (
                         user_event for user_event in events_by_user
-                        if user_event['organizer_id'] == row['organizer_id']
+                        if user_event['organizer_id'] == row['user_id']
                     ),
                     None
                 )
@@ -63,7 +63,7 @@ class UserEventList(View):
                 else:
                     # If the user is not on the events_by_user list, create and add the user to the list
                     events_by_user.append({
-                        # "gamer_id": row['gamer_id'],
+                        "organizer_id": row['user_id'],
                         "full_name": row['full_name'],
                         "events": [event]
                     })

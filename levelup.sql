@@ -29,9 +29,11 @@ SELECT
     u.id user_id,
     u.first_name || ' ' || u.last_name AS full_name
 FROM
-    levlupapi_event e
+    levelupapi_event e
 JOIN 
     levelupapi_eventgamer eg ON e.organizer_id = eg.gamer_id
 JOIN 
     auth_user u ON eg.gamer_id = u.id
 ;
+
+DROP VIEW EVENTS_BY_USER
